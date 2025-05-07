@@ -1,0 +1,22 @@
+{
+    "name": "simple/agent",
+    "description": "A simple agent using OpenAI PHP",
+    "type": "project",
+    "require": {
+        "php": "^8.1",
+        "openai-php/client": "^v0.7.0",
+        "vlucas/phpdotenv": "^5.5",
+        "guzzlehttp/guzzle": "^7.8",
+        "symfony/http-client": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
