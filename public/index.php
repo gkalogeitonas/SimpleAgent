@@ -17,22 +17,15 @@ if (php_sapi_name() === 'cli') {
     echo "Simple Support Agent\n";
     echo "-----------------\n";
     
-    $query = $argv[1] ?? "Can you show me the closed tickets?";
+    $query = $argv[1] ?? "Hello, how can I use the example tool?";
     echo "User Query: $query\n\n";
     
     // Get response from the agent
     $response = $agent->chat(new UserMessage($query));
     
-    // Ensure the response is properly formatted
-    if ($response instanceof \NeuronAI\Chat\Messages\Message) {
-        $responseContent = $response->getContent();
-    } else {
-        $responseContent = json_encode($response, JSON_PRETTY_PRINT);
-    }
-    
     // Display the agent's response
     echo "Agent Response:\n";
-    echo $responseContent;
+    echo $response->getContent();
     echo "\n";
 } 
 // For web usage
