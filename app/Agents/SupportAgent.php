@@ -6,7 +6,7 @@ use NeuronAI\Agent;
 use NeuronAI\Providers\OpenAI\OpenAI;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Tools\Tool;
-use NeuronAI\Tools\ToolProperty;
+use App\Support\TicketRepository;
 
 class SupportAgent extends Agent
 {
@@ -20,27 +20,28 @@ class SupportAgent extends Agent
 
     public function instructions(): string
     {
-        return "You are an AI Agent specialized in providing helpful responses.";
+        return "You are a helpful support assistant. You can list open or closed support tickets.";
     }
 
     public function tools(): array
     {
+        $repo = new TicketRepository();
 
-        $repo = new \App\Support\TicketRepository();
-        
         return [
             Tool::make(
                 'getOpenTickets',
                 'Returns a list of open support tickets.'
             )
-            ->addProperty(new ToolProperty(
-                name: 'input',
-                type: 'string',
-                description: 'The input to echo back.',
-                required: true
-            ))
-            ->setCallable(function (string $input) {
-                return "There is an valiable ticket with id 4";
+            ->setCallable(function () use ($repo) {
+                return $repo->getOpenTickets();
+            }),
+
+            Tool::make(
+                'getClosedTickets',
+                'Returns a list of closed support tickets.'
+            )
+            ->setCallable(function () use ($repo) {
+                return $repo->getClosedTickets();
             }),
         ];
     }

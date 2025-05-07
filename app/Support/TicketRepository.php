@@ -11,13 +11,17 @@ class TicketRepository
         ['id' => 4, 'subject' => 'Billing bug', 'status' => 'closed'],
     ];
 
-    public function getOpenTickets(): array
+    public function getOpenTickets(): string
     {
-        return array_values(array_filter($this->tickets, fn($t) => $t['status'] === 'open'));
+        $openTickets = array_values(array_filter($this->tickets, fn($t) => $t['status'] === 'open'));
+        return json_encode($openTickets, JSON_PRETTY_PRINT);
     }
 
-    public function getClosedTickets(): array
+    public function getClosedTickets(): string
     {
-        return array_values(array_filter($this->tickets, fn($t) => $t['status'] === 'closed'));
+        $closedTickets = array_values(array_filter($this->tickets, fn($t) => $t['status'] === 'closed'));
+        return json_encode($closedTickets, JSON_PRETTY_PRINT);
     }
 }
+
+
