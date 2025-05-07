@@ -2,68 +2,41 @@
 
 namespace App\Agents;
 
-use App\Framework\Agent;
+use NeuronAI\Agent;
+use NeuronAI\Providers\OpenAI\OpenAI;
+use NeuronAI\Providers\AIProviderInterface;
+use NeuronAI\Tools\Tool;
 use App\Support\TicketRepository;
 
 class SupportAgent extends Agent
 {
-    private TicketRepository $repository;
-    
-    public function __construct()
+    protected function provider(): AIProviderInterface
     {
-        $this->repository = new TicketRepository();
-        parent::__construct();
+        return new OpenAI(
+            key: $_ENV['OPENAI_API_KEY'] ?? 'your-openai-api-key',
+            model: $_ENV['AI_MODEL'] ?? 'gpt-4'
+        );
     }
-    
+
     public function instructions(): string
     {
         return "You are a helpful support assistant. You can list open or closed support tickets.";
     }
-    
-    protected function setupTools(): void
+
+    public function tools(): array
     {
-        $this->addTool(
-            'getOpenTickets',
-            'Returns a list of open support tickets.',
-            fn() => $this->repository->getOpenTickets(),
-            [
-                'tickets' => [
-                    'type' => 'array',
-                    'description' => 'List of open tickets',
-                    'items' => [
-                        'type' => 'object',
-                        'properties' => [
-                            'id' => ['type' => 'integer'],
-                            'subject' => ['type' => 'string'],
-                            'status' => ['type' => 'string']
-                        ],
-                        'required' => ['id', 'subject', 'status']
-                    ]
-                ]
-            ],
-            []
-        );
-        
-        $this->addTool(
-            'getClosedTickets',
-            'Returns a list of closed support tickets.',
-            fn() => $this->repository->getClosedTickets(),
-            [
-                'tickets' => [
-                    'type' => 'array',
-                    'description' => 'List of closed tickets',
-                    'items' => [
-                        'type' => 'object',
-                        'properties' => [
-                            'id' => ['type' => 'integer'],
-                            'subject' => ['type' => 'string'],
-                            'status' => ['type' => 'string']
-                        ],
-                        'required' => ['id', 'subject', 'status']
-                    ]
-                ]
-            ],
-            []
-        );
+        $repo = new TicketRepository();
+
+        return [
+            Tool::make(
+                'getOpenTickets',
+                'Returns a list of open support tickets.'
+            )->setCallable(fn() => $repo->getOpenTickets()),
+
+            Tool::make(
+                'getClosedTickets',
+                'Returns a list of closed support tickets.'
+            )->setCallable(fn() => $repo->getClosedTickets()),
+        ];
     }
 }

@@ -7,7 +7,8 @@
         "openai-php/client": "^v0.7.0",
         "vlucas/phpdotenv": "^5.5",
         "guzzlehttp/guzzle": "^7.8",
-        "symfony/http-client": "^6.3"
+        "symfony/http-client": "^6.3",
+        "inspector-apm/neuron-ai": "^1.9"
     },
     "autoload": {
         "psr-4": {

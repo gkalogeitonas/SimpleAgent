@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Agents\SupportAgent;
+use NeuronAI\Chat\Messages\UserMessage;
 
 // Load environment variables from .env file
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
@@ -20,11 +21,18 @@ if (php_sapi_name() === 'cli') {
     echo "User Query: $query\n\n";
     
     // Get response from the agent
-    $response = $agent->chat($query);
+    $response = $agent->chat(new UserMessage($query));
+    
+    // Ensure the response is properly formatted
+    if ($response instanceof \NeuronAI\Chat\Messages\Message) {
+        $responseContent = $response->getContent();
+    } else {
+        $responseContent = json_encode($response, JSON_PRETTY_PRINT);
+    }
     
     // Display the agent's response
     echo "Agent Response:\n";
-    echo $response;
+    echo $responseContent;
     echo "\n";
 } 
 // For web usage
@@ -39,10 +47,17 @@ else {
         echo "<div><strong>Your query:</strong> " . htmlspecialchars($query) . "</div>";
         
         // Get response from the agent
-        $response = $agent->chat($query);
+        $response = $agent->chat(new UserMessage($query));
+        
+        // Ensure the response is properly formatted
+        if ($response instanceof \NeuronAI\Chat\Messages\Message) {
+            $responseContent = $response->getContent();
+        } else {
+            $responseContent = json_encode($response, JSON_PRETTY_PRINT);
+        }
         
         // Display the agent's response
-        echo "<div><strong>Agent response:</strong> <pre>" . htmlspecialchars($response) . "</pre></div>";
+        echo "<div><strong>Agent response:</strong> <pre>" . htmlspecialchars($responseContent) . "</pre></div>";
         echo "<hr>";
     }
     
