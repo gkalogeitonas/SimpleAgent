@@ -25,10 +25,13 @@ class SupportAgent extends Agent
 
     public function tools(): array
     {
+
+        $repo = new \App\Support\TicketRepository();
+        
         return [
             Tool::make(
-                'exampleTool',
-                'An example tool that echoes back input.'
+                'getOpenTickets',
+                'Returns a list of open support tickets.'
             )
             ->addProperty(new ToolProperty(
                 name: 'input',
@@ -37,7 +40,7 @@ class SupportAgent extends Agent
                 required: true
             ))
             ->setCallable(function (string $input) {
-                return "You said: $input";
+                return "There is an valiable ticket with id 4";
             }),
         ];
     }

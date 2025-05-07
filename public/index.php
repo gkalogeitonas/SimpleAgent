@@ -17,7 +17,7 @@ if (php_sapi_name() === 'cli') {
     echo "Simple Support Agent\n";
     echo "-----------------\n";
     
-    $query = $argv[1] ?? "Hello, how can I use the example tool?";
+    $query = $argv[1] ?? "Can you show me the closed tickets?";
     echo "User Query: $query\n\n";
     
     // Get response from the agent
