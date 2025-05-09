@@ -9,6 +9,7 @@ use App\Agents\SmartHome\Tools\TurnOnLightTool;
 use App\Agents\SmartHome\Tools\TurnOffLightTool;
 use App\Agents\SmartHome\Tools\TurnOnAirConditionerTool;
 use App\Agents\SmartHome\Tools\TurnOffAirConditionerTool;
+use App\Support\Observers\AgentActivityObserver;
 
 class SmartHomeAgent extends Agent
 {
@@ -37,6 +38,12 @@ class SmartHomeAgent extends Agent
     
     public static function make(...$args): static
     {
-        return new static();
+        $agent = new static();
+        
+        // Attach our observer to monitor all events
+        $observer = new AgentActivityObserver();
+        $agent->observe($observer);
+        
+        return $agent;
     }
 }
