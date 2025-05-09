@@ -8,7 +8,7 @@ use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Tools\Tool;
 use App\Support\TicketRepository;
 
-class SupportAgent extends Agent
+class TicketsAgent extends Agent
 {
     public function provider(): AIProviderInterface
     {

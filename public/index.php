@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\Agents\SupportAgent;
+use App\Agents\TicketsAgent;
 use App\Agents\SmartHomeAgent;
 use NeuronAI\Chat\Messages\UserMessage;
 
@@ -13,8 +13,8 @@ $dotenv->load();
 // Determine which agent to use based on the first argument
 $agentType = $argv[1] ?? 'support';
 
-if ($agentType === 'support') {
-    $agent = SupportAgent::make();
+if ($agentType === 'tickets') {
+    $agent = TicketsAgent::make();
     echo "Using Support Agent\n";
 } elseif ($agentType === 'smarthome') {
     $agent = SmartHomeAgent::make();

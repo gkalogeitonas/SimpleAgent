@@ -41,7 +41,7 @@ class TicketRepository
 Here we create a custom agent and inject the two tools using `Tool::make()` but call methods from the repository.
 
 ```php
-// app/Agents/SupportAgent.php
+// app/Agents/TicketsAgent.php
 
 use NeuronAI\Agent;
 use NeuronAI\Chat\Messages\UserMessage;
@@ -49,7 +49,7 @@ use NeuronAI\Providers\OpenAI\OpenAI;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Tools\Tool;
 
-class SupportAgent extends Agent
+class TicketsAgent extends Agent
 {
     protected function provider(): AIProviderInterface
     {
@@ -94,11 +94,11 @@ This is the part where the user asks a question, and the agent uses the correct 
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../app/Support/TicketRepository.php';
-require_once __DIR__ . '/../app/Agents/SupportAgent.php';
+require_once __DIR__ . '/../app/Agents/TicketsAgent.php';
 
 use NeuronAI\Chat\Messages\UserMessage;
 
-$agent = SupportAgent::make();
+$agent = TicketsAgent::make();
 
 $query = "Can you show me the closed tickets?";
 $response = $agent->chat(new UserMessage($query));
@@ -113,7 +113,7 @@ echo $response->getContent();
 | Component          | Description                                                               |
 | ------------------ | ------------------------------------------------------------------------- |
 | `TicketRepository` | Encapsulates access to ticket data (simulates a DB, could later use one). |
-| `SupportAgent`     | Neuron AI agent with tools bound to real PHP logic (no inline closures).  |
+| `TicketsAgent`     | Neuron AI agent with tools bound to real PHP logic (no inline closures).  |
 | `index.php`        | Entry point that queries the agent with a user's message.                 |
 
 ---
