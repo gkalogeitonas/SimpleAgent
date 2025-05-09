@@ -41,8 +41,8 @@ class SmartHomeAgent extends Agent
         $agent = new static();
         
         // Attach our observer to monitor all events
-        $observer = new AgentActivityObserver();
-        $agent->observe($observer);
+        //$observer = new AgentActivityObserver();
+        //$agent->observe($observer);
         
         return $agent;
     }

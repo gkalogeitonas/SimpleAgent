@@ -3,8 +3,8 @@
 namespace App\Support\Observers;
 
 use App\Support\Logging\LoggerFactory;
-use NeuronAI\Events\ChatStarted;
-use NeuronAI\Events\ChatCompleted;
+// It's good practice to import specific event classes if they exist and are used for type hinting or data structure access,
+// but for now, we'll rely on the event names as strings and the data structure observed in logs.
 
 class AgentActivityObserver implements \SplObserver
 {
@@ -18,19 +18,19 @@ class AgentActivityObserver implements \SplObserver
     public function update(\SplSubject $subject, ?string $event = null, $data = null): void
     {
         switch ($event) {
-            case 'chat-started':
-                // This captures the initial prompt
-                $this->logger->info("LLM Chat Started", [
-                    'prompt' => $data->message->getContent(),
-                    // 'model' => $subject->provider()->getModel() // This line might cause an error if provider() or getModel() is not accessible or does not exist
+            case 'inference-start': // Changed from 'chat-started'
+                $promptPayload = $data->message ?? null;
+                $this->logger->info("LLM Prompt Sent (inference-start)", [
+                    'prompt_payload' => $promptPayload, // Log the entire message payload
+                    // 'model' => $subject->provider()->getModel() // Uncomment if provider() and getModel() are accessible and stable
                 ]);
                 break;
                 
-            case 'chat-completed': 
-                // This captures the LLM response
-                $this->logger->info("LLM Chat Completed", [
-                    'response' => $data->response->getContent(),
-                    'duration' => $data->duration
+            case 'inference-stop': // Changed from 'chat-completed'
+                $responseData = $data->response ?? null;
+                $this->logger->info("LLM Response Received (inference-stop)", [
+                    'response_payload' => $responseData, // Logs the entire response structure
+                    'duration' => $data->duration ?? null
                 ]);
                 break;
                 
@@ -48,6 +48,7 @@ class AgentActivityObserver implements \SplObserver
                 break;
                 
             default:
+                // This will continue to log other events like chat-start, chat-stop, message-saving, etc.
                 $this->logger->debug("Agent Event: $event", ['data' => $data]);
                 break;
         }
