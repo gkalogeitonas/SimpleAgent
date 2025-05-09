@@ -3,21 +3,33 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Agents\SupportAgent;
+use App\Agents\SmartHomeAgent;
 use NeuronAI\Chat\Messages\UserMessage;
 
 // Load environment variables from .env file
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
-// Create and initialize the agent
-$agent = SupportAgent::make();
+// Determine which agent to use based on the first argument
+$agentType = $argv[1] ?? 'support';
+
+if ($agentType === 'support') {
+    $agent = SupportAgent::make();
+    echo "Using Support Agent\n";
+} elseif ($agentType === 'smarthome') {
+    $agent = SmartHomeAgent::make();
+    echo "Using Smart Home Agent\n";
+} else {
+    echo "Invalid agent type. Use 'support' or 'smarthome'.\n";
+    exit(1);
+}
 
 // For CLI usage
 if (php_sapi_name() === 'cli') {
-    echo "Simple Support Agent\n";
-    echo "-----------------\n";
+    echo "Smart Home Assistant\n";
+    echo "-------------------\n";
     
-    $query = $argv[1] ?? "Can you show me the closed tickets?";
+    $query = $argv[2] ?? "Turn on the light.";
     echo "User Query: $query\n\n";
     
     // Get response from the agent
