@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\Agents\TicketsAgent;
-use App\Agents\SmartHomeAgent;
+use App\Agents\Tickets\TicketsAgent;
+use App\Agents\SmartHome\SmartHomeAgent;
 use NeuronAI\Chat\Messages\UserMessage;
 
 // Load environment variables from .env file

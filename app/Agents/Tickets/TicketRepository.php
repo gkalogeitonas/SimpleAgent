@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support;
+namespace App\Agents\Tickets;
 
 class TicketRepository
 {
@@ -23,5 +23,3 @@ class TicketRepository
         return json_encode($closedTickets, JSON_PRETTY_PRINT);
     }
 }
-
-
